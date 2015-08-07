@@ -28,6 +28,11 @@ def main():
         sys.exit(42)
 
     while True:
+        if not url.startswith('http'):
+            print 'A url não inicia com http:// ou https://'
+            print 'Adicionando, a url monitorada será:'
+            url = 'http://' + url
+            print url
         verify_url(url, today)
         if monit:
             try:
