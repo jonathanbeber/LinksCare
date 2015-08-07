@@ -3,10 +3,15 @@ Ferramenta para monitoramento de links
 
 # Uso
 Usage:
-        linkscare [OPCOES] URL
+
+    linkscare [OPCOES] URL
+
     OPCOES:
+
         -n  Não fica monitorando, apenas vverifica uma vez
+
     ARGUMENTOS:
+
         URL URL para monitorar
 
 # TODO
