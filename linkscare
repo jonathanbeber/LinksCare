@@ -1,0 +1,53 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import sys
+from time import sleep
+from datetime import datetime
+from urllib import urlopen
+
+
+def main():
+    monit = True
+    url = None
+    today = datetime.today()
+
+    if '-n' in sys.argv:
+        monit = False
+        sys.argv.remove('-n')
+
+    try:
+        url = sys.argv[1]
+    except IndexError:
+        print '''Usage:
+        %s [OPCOES] URL
+    OPCOES:
+        -n\tNão fica monitorando, apenas vverifica uma vez
+    ARGUMENTOS:
+        URL\tURL para monitorar''' % sys.argv[0]
+        sys.exit(42)
+
+    while True:
+        verify_url(url, today)
+        if monit:
+            try:
+                sleep(5)
+            except KeyboardInterrupt:
+                print 'Saindo :)'
+                sys.exit(0)
+        else:
+            sys.exit()
+
+
+def verify_url(url, today):
+    try:
+        code = urlopen(url).getcode()
+        if code == 200:
+            print '%s - Sucesso na conexão com o domínio' % today
+        else:
+            print '%s - Falha na conexão com o domínio' % today
+    except:
+        print '%s - Falha na conexão com o domínio' % today
+
+if __name__ == '__main__':
+    main()
