@@ -36,7 +36,7 @@ def main():
         verify_url(url, today)
         if monit:
             try:
-                sleep(5)
+                sleep(10)
             except KeyboardInterrupt:
                 print 'Saindo :)'
                 sys.exit(0)
