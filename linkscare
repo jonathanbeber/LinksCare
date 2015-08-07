@@ -10,7 +10,6 @@ from urllib import urlopen
 def main():
     monit = True
     url = None
-    today = datetime.today()
 
     if '-n' in sys.argv:
         monit = False
@@ -33,7 +32,7 @@ def main():
             print 'Adicionando, a url monitorada será:'
             url = 'http://' + url
             print url
-        verify_url(url, today)
+        verify_url(url)
         if monit:
             try:
                 sleep(10)
@@ -44,15 +43,16 @@ def main():
             sys.exit()
 
 
-def verify_url(url, today):
+def verify_url(url):
+    date = datetime.today()
     try:
         code = urlopen(url).getcode()
         if code == 200:
-            print '%s - Sucesso na conexão com o domínio' % today
+            print '%s - Sucesso na conexão com o domínio' % date
         else:
-            print '%s - Falha na conexão com o domínio' % today
+            print '%s - Falha na conexão com o domínio' % date
     except:
-        print '%s - Falha na conexão com o domínio' % today
+        print '%s - Falha na conexão com o domínio' % date
 
 if __name__ == '__main__':
     main()
