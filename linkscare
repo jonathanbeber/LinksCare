@@ -21,7 +21,7 @@ def main():
         print '''Usage:
         %s [OPCOES] URL
     OPCOES:
-        -n\tNão fica monitorando, apenas vverifica uma vez
+        -n\tNão fica monitorando, apenas verifica uma vez
     ARGUMENTOS:
         URL\tURL para monitorar''' % sys.argv[0]
         sys.exit(42)
