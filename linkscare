@@ -1,11 +1,17 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function
 
 import argparse
 import sys
 from time import sleep
 from datetime import datetime
-from urllib import urlopen
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import urlopen
 
 
 parser = argparse.ArgumentParser(description='Monitora links')
@@ -20,16 +26,16 @@ def main():
 
     while True:
         if not args.url.startswith('http'):
-            print 'A url não inicia com http:// ou https://'
-            print 'Adicionando, a url monitorada será:'
+            print('A url não inicia com http:// ou https://')
+            print('Adicionando, a url monitorada será:')
             args.url = 'http://' + args.url
-            print args.url
+            print(args.url)
         verify_url(args.url)
         if args.monit:
             try:
                 sleep(10)
             except KeyboardInterrupt:
-                print 'Saindo :)'
+                print('Saindo :)')
                 sys.exit(0)
         else:
             sys.exit()
@@ -40,11 +46,11 @@ def verify_url(url):
     try:
         code = urlopen(url).getcode()
         if code == 200:
-            print '%s - Sucesso na conexão com o domínio' % date
+            print('%s - Sucesso na conexão com o domínio' % date)
         else:
-            print '%s - Falha na conexão com o domínio' % date
+            print('%s - Falha na conexão com o domínio' % date)
     except:
-        print '%s - Falha na conexão com o domínio' % date
+        print('%s - Falha na conexão com o domínio' % date)
 
 if __name__ == '__main__':
     main()
