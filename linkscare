@@ -24,21 +24,21 @@ parser.add_argument('-n', dest='monit', action='store_false', default=True,
 def main():
     args = parser.parse_args()
 
-    while True:
-        if not args.url.startswith('http'):
-            print('A url não inicia com http:// ou https://')
-            print('Adicionando, a url monitorada será:')
-            args.url = 'http://' + args.url
-            print(args.url)
-        verify_url(args.url)
-        if args.monit:
-            try:
-                sleep(10)
-            except KeyboardInterrupt:
-                print('Saindo :)')
-                sys.exit(0)
-        else:
-            sys.exit()
+    if not args.url.startswith('http'):
+        print('A url não inicia com http:// ou https://')
+        print('Adicionando, a url monitorada será:')
+        args.url = 'http://' + args.url
+        print(args.url)
+
+    try:
+        while True:
+            verify_url(args.url)
+            if not args.monit:
+                sys.exit()
+            sleep(10)
+    except KeyboardInterrupt:
+        print('Saindo :)')
+        sys.exit(0)
 
 
 def verify_url(url):
