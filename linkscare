@@ -1,39 +1,31 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import argparse
 import sys
 from time import sleep
 from datetime import datetime
 from urllib import urlopen
 
 
+parser = argparse.ArgumentParser(description='Monitora links')
+parser.add_argument('url', metavar='URL',
+                    help='URL para monitorar')
+parser.add_argument('-n', dest='monit', action='store_false', default=True,
+                    help='Não fica monitorando, verifica apenas uma vez')
+
+
 def main():
-    monit = True
-    url = None
-
-    if '-n' in sys.argv:
-        monit = False
-        sys.argv.remove('-n')
-
-    try:
-        url = sys.argv[1]
-    except IndexError:
-        print '''Usage:
-        %s [OPCOES] URL
-    OPCOES:
-        -n\tNão fica monitorando, apenas verifica uma vez
-    ARGUMENTOS:
-        URL\tURL para monitorar''' % sys.argv[0]
-        sys.exit(42)
+    args = parser.parse_args()
 
     while True:
-        if not url.startswith('http'):
+        if not args.url.startswith('http'):
             print 'A url não inicia com http:// ou https://'
             print 'Adicionando, a url monitorada será:'
-            url = 'http://' + url
-            print url
-        verify_url(url)
-        if monit:
+            args.url = 'http://' + args.url
+            print args.url
+        verify_url(args.url)
+        if args.monit:
             try:
                 sleep(10)
             except KeyboardInterrupt:
