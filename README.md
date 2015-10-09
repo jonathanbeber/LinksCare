@@ -8,7 +8,7 @@ Usage:
 
     OPCOES:
 
-        -n            Não fica monitorando, apenas vverifica uma vez
+        -n            Não fica monitorando, apenas verifica uma vez
 
     ARGUMENTOS:
 
