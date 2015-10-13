@@ -15,7 +15,7 @@ except ImportError:
 
 
 parser = argparse.ArgumentParser(description='Monitora links')
-parser.add_argument('url', metavar='URL',
+parser.add_argument('urls', metavar='URL', nargs='+',
                     help='URL para monitorar')
 parser.add_argument('-n', dest='monit', action='store_false', default=True,
                     help='Não fica monitorando, verifica apenas uma vez')
@@ -24,15 +24,12 @@ parser.add_argument('-n', dest='monit', action='store_false', default=True,
 def main():
     args = parser.parse_args()
 
-    if not args.url.startswith('http'):
-        print('A url não inicia com http:// ou https://')
-        print('Adicionando, a url monitorada será:')
-        args.url = 'http://' + args.url
-        print(args.url)
+    args.urls = list(add_prefix(args.urls))
 
     try:
         while True:
-            verify_url(args.url)
+            for url in args.urls:
+                verify_url(url)
             if not args.monit:
                 sys.exit()
             sleep(10)
@@ -41,16 +38,27 @@ def main():
         sys.exit(0)
 
 
-def verify_url(url):
+def add_prefix(urls, output=sys.stderr):
+    for url in urls:
+        if not url.startswith('http'):
+            url = 'http://' + url
+            if output:
+                print('A url não inicia com http:// ou https://', file=output)
+                print('Adicionando, a url monitorada será:', url, file=output)
+        yield url
+
+
+def verify_url(url, output=sys.stdout):
     date = datetime.today()
     try:
         code = urlopen(url).getcode()
         if code == 200:
-            print('%s - Sucesso na conexão com o domínio' % date)
-        else:
-            print('%s - Falha na conexão com o domínio' % date)
+            print('%s - Sucesso na conexão com o domínio' % date, url, file=output)
+            return True
     except:
-        print('%s - Falha na conexão com o domínio' % date)
+        pass
+    print('%s - Falha na conexão com o domínio' % date, url, file=output)
+    return False
 
 if __name__ == '__main__':
     main()
