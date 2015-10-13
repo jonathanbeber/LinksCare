@@ -19,6 +19,8 @@ parser.add_argument('urls', metavar='URL', nargs='+',
                     help='URL para monitorar')
 parser.add_argument('-n', dest='monit', action='store_false', default=True,
                     help='Não fica monitorando, verifica apenas uma vez')
+parser.add_argument('-c', dest='code', action='append', type=int,
+                    help='Códigos HTTP que são aceitos como sucesso. Padrão: iniciados por 2XX e 3XX')
 
 
 def main():
@@ -29,7 +31,7 @@ def main():
     try:
         while True:
             for url in args.urls:
-                verify_url(url)
+                verify_url(url, args.code)
             if not args.monit:
                 sys.exit()
             sleep(10)
@@ -48,11 +50,11 @@ def add_prefix(urls, output=sys.stderr):
         yield url
 
 
-def verify_url(url, output=sys.stdout):
+def verify_url(url, code=None, output=sys.stdout):
     date = datetime.today()
     try:
-        code = urlopen(url).getcode()
-        if code == 200:
+        httpcode = urlopen(url).getcode()
+        if (code is None and 200 <= httpcode <= 399) or httpcode in code:
             print('%s - Sucesso na conexão com o domínio' % date, url, file=output)
             return True
     except:
